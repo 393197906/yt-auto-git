@@ -1,0 +1,29 @@
+{
+  "name": "yt-auto-git",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": " cross-env DEBUG='Auto:*' node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/ycczlyy/stagu"
+  },
+  "bugs": {
+    "url": "https://gitee.com/ycczlyy/stagu/issues"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cli-spinner": "^0.2.8",
+    "cross-env": "^5.2.0",
+    "debug": "^4.0.1",
+    "fs.io": "^1.0.1",
+    "nodemon": "^1.18.4"
+  },
+  "dependencies": {
+    "simple-git": "^1.96.0"
+  }
+}
