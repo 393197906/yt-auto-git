@@ -1,29 +1,29 @@
 {
   "name": "yt-auto-git",
   "version": "1.0.0",
-  "description": "",
+  "description": "dawenxilang",
   "main": "index.js",
   "scripts": {
     "start": " cross-env DEBUG='Auto:*' node index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/ycczlyy/stagu"
+    "url": "https://github.com/393197906/yt-auto-git"
   },
   "bugs": {
-    "url": "https://gitee.com/ycczlyy/stagu/issues"
+    "url": "https://github.com/393197906/yt-auto-git/issues"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cli-spinner": "^0.2.8",
     "cross-env": "^5.2.0",
-    "debug": "^4.0.1",
-    "fs.io": "^1.0.1",
     "nodemon": "^1.18.4"
   },
   "dependencies": {
+    "cli-spinner": "^0.2.8",
+    "debug": "^4.0.1",
+    "fs.io": "^1.0.1",
     "simple-git": "^1.96.0"
   }
 }
