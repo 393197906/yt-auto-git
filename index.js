@@ -1,5 +1,6 @@
 const factory = require('./lib/eventFactory');
 const loading = require('./lib/cliLoading');
+const process = require('process');
 
 module.exports = autoGit = ({
     branch = 'dev',
@@ -8,15 +9,17 @@ module.exports = autoGit = ({
     gitPath = "git@gitee.com:ycczlyy/nana.git",
 } = {}) => {
     const dirTask = factory();
-    dirTask.on('start', async () => {
+    dirTask.on('start', async function () {
         const debugFile = require('debug')('Auto:File');
         const debugGit = require('debug')('Auto:Git');
         const file = require('fs.io').file;
         const directory = require('fs.io').directory;
+        const fsextra = require('fs-extra');
         const git = require('simple-git/promise');
 
-        // 检查文件夹
+        // // 检查文件夹
         const isHas = await directory.isExists(dirPath);
+
         if (!isHas) {
             await directory.createDirectory(dirPath);
             debugFile(`git dir  '${dirPath}' create success`);
@@ -26,6 +29,7 @@ module.exports = autoGit = ({
             loading.stop();
             debugGit('git clone success');
         }
+
         //检查分支
         const excGit = git(dirPath);
         const branchResult = await excGit.branch()
@@ -75,26 +79,43 @@ module.exports = autoGit = ({
             }
         }))
         //拷贝文件
-        file.copy(distPath, dirPath, true);
-        debugFile(`copy ${distPath}/* to ${dirPath}`);
-
-        //添加并提交
+        try {
+            loading.start();
+            const copyResult = await fsextra.copy(distPath, dirPath);
+            loading.stop();
+            debugFile(`copy ${distPath}/* to ${dirPath}`);
+        } catch (e) {
+            console.log(e);
+            loading.stop();
+        }
+        // //添加并提交
         loading.start();
-        await excGit.outputHandler((command, stdout, stderr) => {
-            stdout.pipe(process.stdout);
-            stderr.pipe(process.stderr);
-        }).add('./*')
-        await excGit.outputHandler((command, stdout, stderr) => {
-            stdout.pipe(process.stdout);
-            stderr.pipe(process.stderr);
-        }).commit(new Date().toString())
-        await excGit.outputHandler((command, stdout, stderr) => {
-            stdout.pipe(process.stdout);
-            stderr.pipe(process.stderr);
-        }).push(['-u', 'origin', branch]);
+        try {
+            await excGit
+                .outputHandler((command, stdout, stderr) => {
+                    stdout.pipe(process.stdout);
+                    stderr.pipe(process.stderr);
+                })
+                .add("--all")
+            await excGit
+                .outputHandler((command, stdout, stderr) => {
+                    stdout.pipe(process.stdout);
+                    stderr.pipe(process.stderr);
+                })
+                .commit(new Date().toString())
+            await excGit
+                .outputHandler((command, stdout, stderr) => {
+                    stdout.pipe(process.stdout);
+                    stderr.pipe(process.stderr);
+                })
+                .push(['-u', 'origin', branch]);
+
+        } catch (e) {
+            console.log(e);
+        }
         loading.stop();
         debugGit('push is success!!!!!!!!!!!!!');
-        dirTask.emit("done");
+        this.emit("done");
     })
     return dirTask
 }

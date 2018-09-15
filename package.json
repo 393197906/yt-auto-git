@@ -23,6 +23,7 @@
   "dependencies": {
     "cli-spinner": "^0.2.8",
     "debug": "^4.0.1",
+    "fs-extra": "^7.0.0",
     "fs.io": "^1.0.1",
     "simple-git": "^1.96.0"
   }
